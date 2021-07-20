@@ -16,6 +16,7 @@ namespace Stringint_for_anar
             Console.WriteLine("Enter number B:");
             Strint b = new Strint(Console.ReadLine());
 
+
             Console.WriteLine();
             Console.WriteLine("A + B = " + Strint.Get_String(a + b));
             Console.WriteLine("A - B = " + Strint.Get_String(a - b));
@@ -26,7 +27,34 @@ namespace Stringint_for_anar
             Console.WriteLine();
             Console.WriteLine($"A > B ? = {a > b}");
             Console.WriteLine($"A < B ? = {a < b}");
+            Console.WriteLine();
+
+
+
+            Console.WriteLine("Press Enter to start debugging division!...");
             Console.ReadLine();
+
+            Random rnd = new Random();
+
+
+
+            Strint c;
+            while (true)
+            {
+                a = new Strint("" + rnd.Next(1, 20000));
+                b = new Strint("" + rnd.Next(1, 20000));
+                c = a * b;
+                if (Strint.Get_String(c / a) != Strint.Get_String(b))
+                {
+                    Console.WriteLine($"ERROR {Strint.Get_String(c)} / {Strint.Get_String(a)}({Strint.Get_String(c / a)}) != {Strint.Get_String(b)}");
+                }
+                if (Strint.Get_String(c / b) != Strint.Get_String(a))
+                {
+                    Console.WriteLine($"ERROR {Strint.Get_String(c)} / {Strint.Get_String(b)}({Strint.Get_String(c / b)}) != {Strint.Get_String(a)}");
+                }
+            }
+
+
         }
     }
     class Strint
@@ -409,7 +437,7 @@ namespace Stringint_for_anar
 
                 Strint sum = new Strint("0");
                 Strint ones = new Strint("");
-                
+
 
                 for (int add_zeroes = 0; add_zeroes < left.value.Length; add_zeroes++)
                 {
@@ -425,12 +453,6 @@ namespace Stringint_for_anar
                 return sum;
             }
         }
-
-
-
-
-
-
 
 
 
@@ -452,46 +474,59 @@ namespace Stringint_for_anar
             Strint one = new Strint("1");
             if ((left + one) > right)
             {
-
                 string output = "";
                 string subdata;
                 Strint subvalue = new Strint("0");
-                int i;
-                int counter;
 
-                int step = 0;
-                while (left.value.Length - step > 0)
+                int max_len = left.value.Length;
+                int slider_temp;
+                int slider_2 = 0;
+
+                string tempdiv = left.value;
+                while (slider_2 < max_len)
                 {
-                    subdata = Strint.Get_String(subvalue) + left.value.Substring(step, left.value.Length - step);
-
-                    i = 1;
-                    subvalue = new Strint(subdata.Substring(0, i));
-                    while (subvalue < right && i < subdata.Length)
+                    if (subvalue.value != "0")
                     {
-                        i++;
-                        subvalue = new Strint(subdata.Substring(0, i));
+                        subdata = Strint.Get_String(subvalue) + left.value.Substring(slider_2, max_len - slider_2);
                     }
-                    for (int x = 2; x < i; x++)
+                    else
+                    {
+                        subdata = left.value.Substring(slider_2, max_len - slider_2);
+                    }
+
+                    int temp_len = 0;
+                    if (subvalue.value != "0")
+                    {
+                        temp_len = subvalue.value.Length;
+                    }
+                    slider_temp = 1;
+                    while (new Strint(subdata.Substring(0, slider_temp)) < right && slider_temp < subdata.Length)
+                    {
+                        slider_temp++;
+                    }
+                    for (int i = temp_len + 1; i < slider_temp; i++)
                     {
                         output += "0";
                     }
 
-                    counter = 0;
+                    subvalue = new Strint(subdata.Substring(0, slider_temp));
+                    int counter = 0;
                     while (subvalue > right)
                     {
                         subvalue -= right;
                         counter++;
                     }
-                    if ((subvalue + one) > right)
+                    if (subvalue + one > right)
                     {
                         subvalue -= right;
                         counter++;
                     }
+
+                    slider_2 += slider_temp - temp_len;
                     output += counter;
-                    step += i - 1;
+
                 }
 
-                //Console.WriteLine(output);
                 Strint result = new Strint(output);
 
                 if (sum_negative)
@@ -506,6 +541,7 @@ namespace Stringint_for_anar
                 return new Strint("0");
             }
         }
+
 
 
 
@@ -527,43 +563,57 @@ namespace Stringint_for_anar
             Strint one = new Strint("1");
             if ((left + one) > right)
             {
-
                 string output = "";
                 string subdata;
                 Strint subvalue = new Strint("0");
-                int i;
-                int counter;
 
-                int step = 0;
-                while (left.value.Length - step > 0)
+                int max_len = left.value.Length;
+                int slider_temp;
+                int slider_2 = 0;
+
+                string tempdiv = left.value;
+                while (slider_2 < max_len)
                 {
-                    subdata = Strint.Get_String(subvalue) + left.value.Substring(step, left.value.Length - step);
-
-                    i = 1;
-                    subvalue = new Strint(subdata.Substring(0, i));
-                    while (subvalue < right && i < subdata.Length)
+                    if (subvalue.value != "0")
                     {
-                        i++;
-                        subvalue = new Strint(subdata.Substring(0, i));
+                        subdata = Strint.Get_String(subvalue) + left.value.Substring(slider_2, max_len - slider_2);
                     }
-                    for (int x = 2; x < i; x++)
+                    else
+                    {
+                        subdata = left.value.Substring(slider_2, max_len - slider_2);
+                    }
+
+                    int temp_len = 0;
+                    if (subvalue.value != "0")
+                    {
+                        temp_len = subvalue.value.Length;
+                    }
+                    slider_temp = 1;
+                    while (new Strint(subdata.Substring(0, slider_temp)) < right && slider_temp < subdata.Length)
+                    {
+                        slider_temp++;
+                    }
+                    for (int i = temp_len + 1; i < slider_temp; i++)
                     {
                         output += "0";
                     }
 
-                    counter = 0;
+                    subvalue = new Strint(subdata.Substring(0, slider_temp));
+                    int counter = 0;
                     while (subvalue > right)
                     {
                         subvalue -= right;
                         counter++;
                     }
-                    if ((subvalue + one) > right)
+                    if (subvalue + one > right)
                     {
                         subvalue -= right;
                         counter++;
                     }
+
+                    slider_2 += slider_temp - temp_len;
                     output += counter;
-                    step += i - 1;
+
                 }
 
                 Strint result = subvalue;
