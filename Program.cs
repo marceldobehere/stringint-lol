@@ -22,6 +22,8 @@ namespace Stringint_for_anar
             Console.WriteLine("A - B = " + Strint.Get_String(a - b));
             Console.WriteLine("A * B = " + Strint.Get_String(a * b));
             Console.WriteLine("A / B = " + Strint.Get_String(a / b));
+            Console.WriteLine($"pow(A, B) ? = {Strint.Get_String(Strint.pow(a, b, 0))}");
+            Console.WriteLine($"A ^ B ? = {Strint.Get_String(a ^ b)}");
             Console.WriteLine();
             Console.WriteLine("A % B = " + Strint.Get_String(a % b));
             Console.WriteLine();
@@ -290,6 +292,97 @@ namespace Stringint_for_anar
             }
         }
 
+        public static Strint operator ^(Strint left, Strint right)
+        {
+            Strint zero = new Strint("0");
+            //Console.Title = $"{left.value}^{right.value}";
+            //Console.ReadLine();
+            //Console.WriteLine($"{left.value}^{right.value}");
+            if (right < new Strint("6"))
+            {
+                Strint one = new Strint("1");
+                Strint final = new Strint("1");
+                while (right > zero)
+                {
+                    final *= left;
+                    right -= one;
+                }
+                return final;
+            }
+            else
+            {
+                Strint x = new Strint("2");
+                if (true) // (left.value.Length < 4 || (left % x).value != zero.value)
+                {
+                    if ((right % x).value == zero.value)
+                    {
+                        return (left ^ (right / x)) ^ x;
+                    }
+                    else
+                    {
+                        return ((left ^ (right / x)) ^ x) * left;
+                    }
+                }
+                else
+                {
+                    Strint y = (left / x);
+                    return (y ^ right) * (y ^ right);
+                }
+            }
+        }
+
+
+        public static Strint pow(Strint left, Strint right, int count)
+        {
+            Strint zero = new Strint("0");
+            Strint one = new Strint("1");
+            if (left.value == one.value || right.value == zero.value)
+            {
+                return one;
+            }
+            else
+            {
+
+                //Console.Title = $"{left.value}^{right.value}";
+                //Console.ReadLine();
+                //Console.WriteLine($"{left.value}^{right.value}");
+                // 1048576 ^ 1048576
+                count++;
+                //Console.WriteLine(count);
+                if (right < new Strint("4"))
+                {
+                    Strint final = new Strint("1");
+                    while (right > zero)
+                    {
+                        final *= left;
+                        right -= one;
+                    }
+                    //Console.WriteLine(count);
+                    return final;
+                }
+                else
+                {
+                    Strint x = new Strint("2");
+                    if (Strint.Get_String(left).Length < 4 || (left % x).value != zero.value)
+                    {
+                        if ((right % x).value == zero.value)
+                        {
+                            //Console.WriteLine(count);
+                            return Strint.pow(Strint.pow(left, (right / x), count), x, count);
+                        }
+                        else
+                        {
+                            //Console.WriteLine(count);
+                            return Strint.pow(Strint.pow(left, (right / x), count), x, count) * left;
+                        }
+                    }
+                    else
+                    {
+                        return Strint.pow(left / x, right, count) * Strint.pow(x, right, count);
+                    }
+                }
+            }
+        }
 
 
         public static Strint operator +(Strint left, Strint right)
@@ -402,6 +495,7 @@ namespace Stringint_for_anar
         {
             if (left.value.Length == 1)
             {
+
                 Strint zero = new Strint("0");
                 Strint one = new Strint("1");
                 Strint sum = new Strint("0");
@@ -419,38 +513,49 @@ namespace Stringint_for_anar
                 }
 
                 return sum;
+
+
             }
             else
             {
-                bool left_minus = left.negative;
-                bool right_minus = right.negative;
-                left = new Strint(left.value);
-                right = new Strint(right.value);
-
-                bool sum_negative = false;
-
-                if ((left_minus || right_minus) && !(left_minus && right_minus))
+                if (right.value.Length == 1)
                 {
-                    sum_negative = true;
+
+
+                    return right * left;
                 }
-
-
-                Strint sum = new Strint("0");
-                Strint ones = new Strint("");
-
-
-                for (int add_zeroes = 0; add_zeroes < left.value.Length; add_zeroes++)
+                else
                 {
-                    ones = new Strint("" + left.value[left.value.Length - add_zeroes - 1]);
-                    sum += new Strint((ones * right).value + "".PadLeft(add_zeroes, '0'));
-                }
+                    bool left_minus = left.negative;
+                    bool right_minus = right.negative;
+                    left = new Strint(left.value);
+                    right = new Strint(right.value);
 
-                if (sum_negative)
-                {
-                    sum = Strint.Invert_negative(sum);
-                }
+                    bool sum_negative = false;
 
-                return sum;
+                    if ((left_minus || right_minus) && !(left_minus && right_minus))
+                    {
+                        sum_negative = true;
+                    }
+
+
+                    Strint sum = new Strint("0");
+                    Strint ones = new Strint("");
+
+
+                    for (int add_zeroes = 0; add_zeroes < left.value.Length; add_zeroes++)
+                    {
+                        ones = new Strint("" + left.value[left.value.Length - add_zeroes - 1]);
+                        sum += new Strint((ones * right).value + "".PadLeft(add_zeroes, '0'));
+                    }
+
+                    if (sum_negative)
+                    {
+                        sum = Strint.Invert_negative(sum);
+                    }
+
+                    return sum;
+                }
             }
         }
 
@@ -560,6 +665,7 @@ namespace Stringint_for_anar
                 sum_negative = true;
             }
 
+
             Strint one = new Strint("1");
             if ((left + one) > right)
             {
@@ -627,7 +733,7 @@ namespace Stringint_for_anar
             }
             else
             {
-                return new Strint("0");
+                return left;
             }
         }
     }
